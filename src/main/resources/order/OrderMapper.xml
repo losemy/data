@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.losemy.data.dao.order.OrderDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.github.losemy.data.model.order.OrderDO">
+        <result column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="order_id" property="orderId" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        user_id, order_id, remark, create_time, update_time
+    </sql>
+
+    <select id="findByUserIdAndOrderIdAndUpdateTime" resultType="OrderDO">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order t
+        where t.user_id=#{userId} and t.order_id=#{orderId}
+        and t.update_time=#{updateTime}
+    </select>
+
+    <!--  查找数据比消息时间旧（<=）的数据 更新之后需要更新时间  -->
+    <update id="updateByUserIdAndOrderId">
+        update t_order o set o.remark = #{remark} , o.update_time = #{updateTime} where o.user_id = #{userId} and
+        o.order_id = #{orderId} and
+        <![CDATA[ o.update_time <= #{updateTime}  ]]>
+    </update>
+
+    <delete id="deleteByUserIdAndOrderId">
+        delete from t_order where user_id = #{userId} and
+        order_id = #{orderId} and update_time = #{updateTime}
+    </delete>
+
+
+    <!--  查找数据比消息时间新（>）的数据  -->
+    <select id="findByUserIdAndOrderId" resultType="java.lang.Integer">
+        select
+        count(t.ID)
+        from t_order t
+        where t.user_id=#{userId} and t.order_id=#{orderId}
+        and <![CDATA[ t.update_time > #{updateTime} ]]>
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer">
+        select
+        count(t.ID)
+        from t_order t
+        where t.user_id=#{userId} and t.order_id=#{orderId}
+    </select>
+
+</mapper>

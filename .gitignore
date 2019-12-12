@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+**/target/
+# IntelliJ project files
+.idea
+*.iml
+**/out
+*.ipr
+*.iws
+*rebel.xml*
