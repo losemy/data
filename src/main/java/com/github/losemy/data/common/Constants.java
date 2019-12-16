@@ -12,9 +12,9 @@ public interface Constants {
 
     String REDIS_TARGET_URL_PREFIX = "target-url:";
 
-    int PAGE_SIZE = 100;
+    int PAGE_SIZE = 1000;
 
-    int TOTAL_JOB = 30;
+    int TOTAL_JOB = Runtime.getRuntime().availableProcessors() * 2;
 
     /**
      * 对应rocketMQ 30s

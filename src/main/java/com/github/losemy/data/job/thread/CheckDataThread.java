@@ -3,16 +3,13 @@ package com.github.losemy.data.job.thread;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
-import com.alibaba.fastjson.JSON;
 import com.github.losemy.data.common.Constants;
 import com.github.losemy.data.model.demo.OrderOldDO;
-import com.github.losemy.data.model.order.OrderDO;
 import com.github.losemy.data.service.OrderOldService;
 import com.github.losemy.data.service.OrderService;
 import com.xxl.job.core.log.XxlJobLogger;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -48,21 +45,12 @@ public class CheckDataThread implements Callable<Long> {
                     log.info("当前任务执行完毕");
                     break;
                 }
-                Iterator<OrderOldDO> orderOldDOIterator = orderOldDOS.iterator();
-                while (orderOldDOIterator.hasNext()) {
-                    OrderOldDO orderOldDO = orderOldDOIterator.next();
-                    orderOldDOIterator.remove();
-                    lastId = orderOldDO.getId();
-                    //需要验证数据新旧决定是否需要save 需要考虑覆盖
-                    OrderDO orderDO = orderService.findByUserIdAndOrderIdAndUpdateTime(orderOldDO.getUserId(),orderOldDO.getOrderId(),orderOldDO.getUpdateTime());
-                    // 代表数据没有同步 需要判断主键id不为空
-                    if(orderDO == null || orderDO.getId() == null){
-                        XxlJobLogger.log("not-sync-data {}", JSON.toJSONString(orderOldDO));
-                        count++;
-                    }
 
-                }
-                lastId++;
+                long paCount = orderOldDOS.stream()
+                        .filter(orderOldDO -> orderService.findCount(orderOldDO.getUserId(),orderOldDO.getOrderId()) <= 0)
+                        .count();
+                lastId = orderOldDOS.get(orderOldDOS.size()-1).getId() + 1;
+                count += paCount;
             }
             log.info("Check-Data not-sync {} data costs {}ms",count,timer.intervalMs());
             XxlJobLogger.log("Check-Data not-sync {} data costs {}ms",count,timer.intervalMs());

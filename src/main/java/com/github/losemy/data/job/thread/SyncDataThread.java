@@ -13,7 +13,6 @@ import com.xxl.job.core.log.XxlJobLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -60,30 +59,23 @@ public class SyncDataThread implements Callable<Long> {
                     log.info("当前任务执行完毕");
                     break;
                 }
-                Iterator<OrderOldDO> orderOldDOIterator = orderOldDOS.iterator();
-                while (orderOldDOIterator.hasNext()) {
-                    OrderOldDO orderOldDO = orderOldDOIterator.next();
-                    orderOldDOIterator.remove();
-                    lastId = orderOldDO.getId();
-                    //需要验证数据新旧决定是否需要save 需要考虑覆盖
-                    OrderDO orderDO = orderService.findByUserIdAndOrderIdAndUpdateTime(orderOldDO.getUserId(),orderOldDO.getOrderId(),orderOldDO.getUpdateTime());
 
-                    int result = orderService.findCount(orderOldDO.getUserId(),orderOldDO.getOrderId());
+                // 额外使用 是否会有提升 需要测试啊
+                // 测试表明提升不大 甚至没有
+                long paCount = orderOldDOS.stream()
+                        .filter(orderOldDO -> orderService.findCount(orderOldDO.getUserId(),orderOldDO.getOrderId()) <= 0)
+                        .mapToLong(orderOldDO -> {
+                            try {
+                                orderService.save(BeanMapper.map(orderOldDO, OrderDO.class));
+                            }catch(DuplicateKeyException e){
+                                log.error("save失败");
+                                return 0;
+                            }
+                            return 1;
+                        }).sum();
 
-                    if(result <= 0){
-                        // save 默认会使用ID回查 所以 bug出现了
-                        count++;
-                        try {
-                            orderService.save(BeanMapper.map(orderOldDO, OrderDO.class));
-                            continue;
-                        }catch(DuplicateKeyException e){
-                            log.error("save失败");
-                            count--;
-                        }
-
-                    }
-                }
-                lastId++;
+                lastId = orderOldDOS.get(orderOldDOS.size()-1).getId() + 1;
+                count += paCount;
                 XxlJobLogger.log("SyncData-save {} data costs {}ms",count,timer.intervalMs());
             }
             log.info("SyncData-save {} data costs {}ms",count,timer.intervalMs());

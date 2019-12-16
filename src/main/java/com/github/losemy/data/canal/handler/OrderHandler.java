@@ -1,8 +1,8 @@
 package com.github.losemy.data.canal.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.github.losemy.data.canal.model.Order;
 import com.github.losemy.data.common.Constants;
-import com.github.losemy.data.model.demo.OrderOldDO;
 import com.github.losemy.data.nacos.ConsumeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendCallback;
@@ -20,7 +20,7 @@ import top.javatool.canal.client.handler.EntryHandler;
 @Component
 @CanalTable(value = "simplify.t_order")
 @Slf4j
-public class OrderHandler implements EntryHandler<OrderOldDO> {
+public class OrderHandler implements EntryHandler<Order> {
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
@@ -29,7 +29,7 @@ public class OrderHandler implements EntryHandler<OrderOldDO> {
     private ConsumeMessage consumeMessage;
 
     @Override
-    public void update(OrderOldDO orderBefore, OrderOldDO orderAfter) {
+    public void update(Order orderBefore, Order orderAfter) {
         log.info("handler-update before {} , after {}", JSON.toJSONString(orderBefore),JSON.toJSONString(orderAfter));
 
         if(consumeMessage.isSendMessage()) {
@@ -51,7 +51,7 @@ public class OrderHandler implements EntryHandler<OrderOldDO> {
     }
 
     @Override
-    public void insert(OrderOldDO orderOld) {
+    public void insert(Order orderOld) {
         log.info("handler-insert {}", JSON.toJSONString(orderOld));
         if(consumeMessage.isSendMessage()) {
             rocketMQTemplate.asyncSend(Constants.ADD_TOPIC, orderOld,
@@ -72,7 +72,7 @@ public class OrderHandler implements EntryHandler<OrderOldDO> {
 
 
     @Override
-    public void delete(OrderOldDO orderOld) {
+    public void delete(Order orderOld) {
         log.info("handler-delete {}", JSON.toJSONString(orderOld));
         if(consumeMessage.isSendMessage()) {
             rocketMQTemplate.asyncSend(Constants.DEL_TOPIC, orderOld,

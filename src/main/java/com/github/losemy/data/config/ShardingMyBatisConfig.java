@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -54,7 +55,7 @@ public class ShardingMyBatisConfig {
 
     @Bean(name="shardingTransactionManager")
     @Primary
-    public DataSourceTransactionManager transactionManager(@Qualifier("ds") DataSource dataSource) {
+    public PlatformTransactionManager transactionManager(@Qualifier("ds") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
