@@ -31,7 +31,7 @@ public interface Constants {
     String DEL_TOPIC = "del-order";
     String UPD_TOPIC = "upd-order";
     /**
-     * retry topic
+     * retry 队列topic设置
      */
     String RETRY_DEL_TOPIC = "retry-del-order";
     String RETRY_UPD_TOPIC = "retry-upd-order";
