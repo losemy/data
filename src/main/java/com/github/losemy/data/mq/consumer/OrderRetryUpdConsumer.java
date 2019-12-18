@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 @Lazy
 @Service
 @RocketMQMessageListener(topic = "${demo.rocketmq.orderRetryUpdTopic}",
-        consumerGroup = "order", consumeMode = ConsumeMode.CONCURRENTLY)
+        consumerGroup = "${demo.rocketmq.orderRetryUpdTopic}", consumeMode = ConsumeMode.CONCURRENTLY)
 @Slf4j
 public class OrderRetryUpdConsumer  implements RocketMQListener<Order>, RocketMQPushConsumerLifecycleListener {
 
