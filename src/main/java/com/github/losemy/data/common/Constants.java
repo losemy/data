@@ -30,6 +30,9 @@ public interface Constants {
     String ADD_TOPIC = "add-order";
     String DEL_TOPIC = "del-order";
     String UPD_TOPIC = "upd-order";
+    /**
+     * retry topic
+     */
     String RETRY_DEL_TOPIC = "retry-del-order";
     String RETRY_UPD_TOPIC = "retry-upd-order";
 }
