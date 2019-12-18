@@ -45,7 +45,6 @@ public class InsertJobHandler extends IJobHandler {
                 order.setCreateTime(now);
                 order.setUpdateTime(now);
                 boolean success = orderOldService.save(order);
-                log.info("InsertJob-save {}", success);
                 XxlJobLogger.log("InsertJob-save {}", success);
             }
         }catch(Exception e){

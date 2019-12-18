@@ -69,7 +69,7 @@ public class SyncDataJobHandler extends IJobHandler {
             long begin = lastId;
             long end = 0;
             int jobs = Constants.TOTAL_JOB;
-            long per = maxId / jobs;
+            long per = (maxId - lastId) / jobs;
 
             counts = new ArrayList<>();
             for(int i=0; i < jobs; i++){
@@ -98,12 +98,10 @@ public class SyncDataJobHandler extends IJobHandler {
             if (e instanceof InterruptedException) {
                 // 执行中断处理
                 handlerInterrupts(counts);
-
             }
             log.error("执行异常",e);
             throw e;
         }
-
 
         return SUCCESS;
     }

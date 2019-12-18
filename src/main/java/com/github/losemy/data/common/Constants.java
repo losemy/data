@@ -23,13 +23,13 @@ public interface Constants {
 
     int MESSAGE_TIMEOUT = 50000;
 
-    String TOPIC = "order4";
-    String ADD_TOPIC = TOPIC +":add";
 
-    String DEL_TOPIC = TOPIC + ":del";
-
-    String UPD_TOPIC = TOPIC + ":upd";
-
-    String RETRY_DEL_TOPIC = TOPIC + ":retry-del";
-    String RETRY_UPD_TOPIC = TOPIC + ":retry-upd";
+    /**
+     * 消息topic
+     */
+    String ADD_TOPIC = "add-order";
+    String DEL_TOPIC = "del-order";
+    String UPD_TOPIC = "upd-order";
+    String RETRY_DEL_TOPIC = "retry-del-order";
+    String RETRY_UPD_TOPIC = "retry-upd-order";
 }

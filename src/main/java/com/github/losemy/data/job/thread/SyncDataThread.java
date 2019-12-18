@@ -3,6 +3,7 @@ package com.github.losemy.data.job.thread;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
+import com.alibaba.fastjson.JSON;
 import com.github.losemy.data.common.Constants;
 import com.github.losemy.data.model.demo.OrderOldDO;
 import com.github.losemy.data.model.order.OrderDO;
@@ -47,14 +48,15 @@ public class SyncDataThread implements Callable<Long> {
      */
     @Override
     public Long call() throws Exception {
-        log.info("id ranges [{}, {})",begin,end);
+        XxlJobLogger.log("id ranges [{}, {})",begin,end);
         long count = 0;
         TimeInterval timer = DateUtil.timer();
+        TimeInterval cycleTimer = DateUtil.timer();
         try{
             long lastId = begin;
             while(!Thread.currentThread().isInterrupted()){
                 List<OrderOldDO> orderOldDOS = orderOldService.findByPageAndMaxId(Constants.PAGE_SIZE, lastId,end);
-                log.info("orderOldDOS {}", orderOldDOS.size());
+                XxlJobLogger.log("orderOldDOS {}", orderOldDOS.size());
                 if (CollUtil.isEmpty(orderOldDOS)) {
                     log.info("当前任务执行完毕");
                     break;
@@ -66,9 +68,13 @@ public class SyncDataThread implements Callable<Long> {
                         .filter(orderOldDO -> orderService.findCount(orderOldDO.getUserId(),orderOldDO.getOrderId()) <= 0)
                         .mapToLong(orderOldDO -> {
                             try {
-                                orderService.save(BeanMapper.map(orderOldDO, OrderDO.class));
+                                OrderDO orderDO = BeanMapper.map(orderOldDO, OrderDO.class);
+                                orderDO.setId(null);
+                                boolean success = orderService.save(orderDO);
+                                XxlJobLogger.log("SyncData-save {} success {}", JSON.toJSONString(orderOldDO),success);
                             }catch(DuplicateKeyException e){
-                                log.error("save失败");
+                                XxlJobLogger.log("save失败");
+                                log.error("save失败-数据已存在",e);
                                 return 0;
                             }
                             return 1;
@@ -76,9 +82,9 @@ public class SyncDataThread implements Callable<Long> {
 
                 lastId = orderOldDOS.get(orderOldDOS.size()-1).getId() + 1;
                 count += paCount;
-                XxlJobLogger.log("SyncData-save {} data costs {}ms",count,timer.intervalMs());
+                XxlJobLogger.log("SyncData-save {} data costs {}ms",paCount,cycleTimer.intervalMs());
+                cycleTimer.restart();
             }
-            log.info("SyncData-save {} data costs {}ms",count,timer.intervalMs());
             XxlJobLogger.log("SyncData-save {} data costs {}ms",count,timer.intervalMs());
         }catch(Exception e){
             log.error("同步数据异常", e);

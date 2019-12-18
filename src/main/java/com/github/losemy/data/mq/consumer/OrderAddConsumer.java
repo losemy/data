@@ -25,8 +25,8 @@ import org.springframework.stereotype.Service;
  **/
 @Lazy
 @Service
-@RocketMQMessageListener(topic = "${demo.rocketmq.orderTopic}",
-        consumerGroup = "order4-add-consumer", selectorExpression = "add",consumeMode = ConsumeMode.CONCURRENTLY)
+@RocketMQMessageListener(topic = "${demo.rocketmq.orderAddTopic}",
+        consumerGroup = "order", consumeMode = ConsumeMode.CONCURRENTLY)
 @Slf4j
 public class OrderAddConsumer implements RocketMQListener<Order>, RocketMQPushConsumerLifecycleListener {
 

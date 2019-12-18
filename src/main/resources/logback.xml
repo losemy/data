@@ -16,8 +16,11 @@
     <!--输出到文件-->
     <appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/info/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log.path}/info/info.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <MaxHistory>${log.maxHistory}</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1024MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <encoder>
             <pattern>${log.pattern}</pattern>

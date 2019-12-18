@@ -47,8 +47,7 @@ public class UpdateJobHandler extends IJobHandler {
                 }
 
                 boolean success = orderOldService.updateBatchById(orderOldDOs);
-                XxlJobLogger.log("save after {}",success);
-                log.info("execute success {}",success);
+                XxlJobLogger.log("UpdateJob-update {}",success);
             }
         }catch(Exception e){
             XxlJobLogger.log(e);

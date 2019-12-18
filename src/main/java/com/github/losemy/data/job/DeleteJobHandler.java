@@ -34,8 +34,6 @@ public class DeleteJobHandler extends IJobHandler {
             for(int i=0; i < 100; i++) {
                 List<OrderOldDO> orderOldDOs = orderOldService.selectByRandom();
                 boolean success = orderOldService.removeByIds(orderOldDOs.stream().map(order -> order.getId()).collect(Collectors.toList()));
-
-                log.info("DeleteJob result {}", success);
                 XxlJobLogger.log("DeleteJob result {} {}",success, JSON.toJSONString(orderOldDOs));
             }
         }catch(Exception e){

@@ -55,8 +55,4 @@ public class MyBatisConfig {
         return sqlSessionFactoryBean.getObject();
     }
 
-
-
-
-
 }
