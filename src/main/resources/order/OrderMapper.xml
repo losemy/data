@@ -3,7 +3,7 @@
 <mapper namespace="com.github.losemy.data.dao.order.OrderDao">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.github.losemy.data.model.order.OrderDO">
+    <resultMap id="BaseResultMap" type="OrderDO">
         <result column="id" property="id" />
         <result column="user_id" property="userId" />
         <result column="order_id" property="orderId" />

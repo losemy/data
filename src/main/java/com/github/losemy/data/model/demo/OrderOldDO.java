@@ -6,6 +6,7 @@ import com.github.losemy.data.model.BaseDO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
 
@@ -18,6 +19,7 @@ import javax.persistence.Column;
 @Accessors(chain = true)
 @TableName("t_order")
 @Data
+@Alias("OrderOldDO")
 public class OrderOldDO extends BaseDO {
 
     @TableField(value = "user_id")

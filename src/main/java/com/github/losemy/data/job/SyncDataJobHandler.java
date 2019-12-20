@@ -14,7 +14,6 @@ import com.xxl.job.core.log.XxlJobLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ import java.util.concurrent.Future;
  **/
 @JobHandler(value="syncDataJobHandler")
 @Service
-@Lazy
 @Slf4j
 public class SyncDataJobHandler extends IJobHandler {
 
@@ -91,6 +89,11 @@ public class SyncDataJobHandler extends IJobHandler {
             syncData.setSyncDataFinish(true);
             syncData.setMaxId(maxId);
 
+
+            //todo 待解决bug InheritableThreadLocal结合线程池使用释放的问题
+            // 使用线程池 壳只会被创建一次也就是后续都是那个壳 不会变
+            // TransmittableThreadLocal https://github.com/alibaba/transmittable-thread-local
+            // -javaagent:/apps/jars/transmittable-thread-local-2.11.2.jar
             log.info("SyncData-save {} data costs {}ms",totalCount,timer.intervalMs());
             XxlJobLogger.log("SyncData-save {} data costs {}ms",totalCount,timer.intervalMs());
 

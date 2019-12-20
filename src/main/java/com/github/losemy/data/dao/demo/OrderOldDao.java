@@ -4,6 +4,7 @@ package com.github.losemy.data.dao.demo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.losemy.data.model.demo.OrderOldDO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author lose
  * @date 2019-12-05
  **/
+@Repository
 public interface OrderOldDao extends BaseMapper<OrderOldDO> {
     /**
      * 分页获取数据

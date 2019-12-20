@@ -1,11 +1,13 @@
 package com.github.losemy.data.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.github.losemy.data.DataApplication;
 import com.github.losemy.data.model.order.OrderDO;
+import com.github.losemy.data.mq.message.Order;
 import com.github.losemy.data.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -13,7 +15,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.Serializable;
 
 import static com.alibaba.nacos.api.common.Constants.DEFAULT_GROUP;
 
@@ -31,6 +36,20 @@ public class OrderServiceImplTest {
 
     @NacosInjected
     private ConfigService configService;
+
+
+    @Autowired
+    private RedisTemplate<String, Serializable> redisTemplate;
+
+
+    @Test
+    public void testRedis(){
+        Order o = new Order();
+        o.setId(123L);
+        o.setRemark(RandomUtil.randomString(6));
+        redisTemplate.opsForValue().set(o.getRemark(),o);
+        log.info("{}",redisTemplate.opsForValue().get(o.getRemark()));
+    }
 
     @Test
     public void testNacos() throws NacosException {

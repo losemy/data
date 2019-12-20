@@ -13,7 +13,6 @@ import com.xxl.job.core.log.XxlJobLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,13 +22,13 @@ import java.util.concurrent.Future;
 
 /**
  * log使用 XxlJobLogger
+ * @lazy不起作用 因为xxl-job框架会调用getBean
  * @author lose
  * @date 2019-12-08
  **/
 @JobHandler(value="checkDataJobHandler")
 @Service
 @Slf4j
-@Lazy
 public class CheckDataJobHandler extends IJobHandler {
 
     @Autowired

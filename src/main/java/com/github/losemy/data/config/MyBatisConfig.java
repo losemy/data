@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
@@ -24,7 +25,8 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(
         basePackages = "com.github.losemy.data.dao.demo",
-        sqlSessionFactoryRef = "sqlSessionFactory"
+        sqlSessionFactoryRef = "sqlSessionFactory",
+        annotationClass = Repository.class
 )
 @PropertySource("classpath:datasource.properties")
 public class MyBatisConfig {

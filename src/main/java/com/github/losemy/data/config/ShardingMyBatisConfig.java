@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
@@ -35,7 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @MapperScan(
         basePackages = "com.github.losemy.data.dao.order",
-        sqlSessionFactoryRef = "shardingSqlSessionFactory"
+        sqlSessionFactoryRef = "shardingSqlSessionFactory",
+        annotationClass = Repository.class
 )
 @PropertySource("classpath:datasource.properties")
 public class ShardingMyBatisConfig {
