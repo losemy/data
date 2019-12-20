@@ -3,7 +3,7 @@
 <mapper namespace="com.github.losemy.data.dao.demo.OrderOldDao">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.github.losemy.data.model.demo.OrderOldDO">
+    <resultMap id="BaseResultMap" type="OrderOldDO">
         <result column="id" property="id" />
         <result column="user_id" property="userId" />
         <result column="order_id" property="orderId" />
@@ -18,14 +18,14 @@
         user_id, order_id, remark, create_time, update_time
     </sql>
 
-    <select id="findByPage" resultType="OrderOldDO">
+    <select id="findByPage" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_order u
         where u.id >= #{lastId} order by u.id asc limit #{pageSize}
     </select>
 
-    <select id="findByPageAndMaxId" resultType="OrderOldDO">
+    <select id="findByPageAndMaxId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_order u
@@ -38,7 +38,7 @@
         select max(id) from t_order
     </select>
 
-    <select id="selectByRandom" resultType="OrderOldDO">
+    <select id="selectByRandom" resultMap="BaseResultMap">
         SELECT * FROM t_order
         WHERE id >= (SELECT floor( RAND() * ((SELECT MAX(id) FROM t_order)-(SELECT MIN(id) FROM t_order)) + (SELECT MIN(id) FROM t_order)))
         ORDER BY id LIMIT 10

@@ -9,6 +9,6 @@
 mvn clean package -Dmaven.test.skip=true
 
 ### 运行
-nohup java -server -jar /apps/jars/data.jar > /dev/null 2>&1 &
+nohup java -javaagent:/apps/jars/transmittable-thread-local-2.11.2.jar -server -jar /apps/jars/data.jar > /dev/null 2>&1 &
 
 
