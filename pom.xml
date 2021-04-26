@@ -52,7 +52,7 @@
         <nacos-config.version>0.2.1</nacos-config.version>
 
         <logback.version>1.2.3</logback.version>
-        <common-io.version>2.4</common-io.version>
+        <common-io.version>2.7</common-io.version>
         <rocketmq.version>4.5.1</rocketmq.version>
         <zookeeper.version>3.5.6</zookeeper.version>
         <groovy.version>2.5.6</groovy.version>
