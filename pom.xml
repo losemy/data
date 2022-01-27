@@ -42,7 +42,7 @@
         <sharding.version>3.1.0</sharding.version>
         <!-- poi -->
         <poi.version>3.17</poi.version>
-        <xerces.version>2.11.0</xerces.version>
+        <xerces.version>2.12.2</xerces.version>
 
         <mybatis-plus.version>3.3.0</mybatis-plus.version>
         <rocketmq-starter.version>2.0.3</rocketmq-starter.version>
