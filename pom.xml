@@ -23,7 +23,7 @@
         <springfox-swagger.version>2.9.2</springfox-swagger.version>
 
         <!-- job调度 -->
-        <xxl-job.version>2.1.2</xxl-job.version>
+        <xxl-job.version>2.3.1</xxl-job.version>
         <elastic-job.version>2.1.5</elastic-job.version>
 
         <fastjson.version>1.2.56</fastjson.version>
